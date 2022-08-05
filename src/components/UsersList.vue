@@ -24,26 +24,27 @@
         <th scope="col">Handle</th>
       </tr>
     </thead>
-    <tbody v-if="list.length > 0">
-      <tr>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-      </tr>
-      <tr>
-        <td>Jacob</td>
-        <td>Thornton</td>
-        <td>@fat</td>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
+    <tbody v-if="userList.length > 0">
+      <tr v-for="user in userList" :key="user.id">
+        <td>{{ user.name }}</td>
+        <td>{{ user.surname }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.phoneNumber }}</td>
+        <td>{{ user.activate }}</td>
+        <td>
+          <button type="button" class="btn btn-primary">Edit</button> &nbsp;
+          <button
+            @click="deleteUser(user.id)"
+            type="button"
+            class="btn btn-danger"
+          >
+            Delete
+          </button>
+        </td>
       </tr>
     </tbody>
   </table>
-  <div v-if="list.length <= 0" class="jumbotron">
+  <div v-if="userList.length <= 0" class="jumbotron">
     <h1 class="display-6">No items</h1>
   </div>
 
@@ -136,8 +137,14 @@
           <button type="button" class="btn btn-secondary" data-dismiss="modal">
             Close
           </button>
-          <button type="button" class="btn btn-primary" @click="save">
-            Save changes
+          <button
+            :disabled="isAll"
+            type="button"
+            class="btn btn-primary"
+            data-dismiss="modal"
+            @click="save"
+          >
+            Submit
           </button>
         </div>
       </div>
@@ -147,9 +154,24 @@
 
 <script>
 import axios from "axios";
+import userData from "../../db.json";
 export default {
   name: "App",
   components: {},
+  computed: {
+    isAll: function () {
+      if (
+        !this.user.name ||
+        !this.user.surname ||
+        !this.user.email ||
+        !this.user.phoneNumber ||
+        !this.user.activate
+      ) {
+        return true;
+      }
+      return false;
+    },
+  },
   data() {
     return {
       user: {
@@ -160,12 +182,28 @@ export default {
         activate: "",
       },
 
-      list: [],
+      userList: [],
     };
   },
+  mounted() {
+    this.userList = userData.users;
+  },
   methods: {
-    create() {},
+    async deleteUser(id) {
+      console.log(id, "eeeeeeeeeeeee");
+      let result = await axios.delete("http://localhost:3000/users/" + id);
+      console.log(result);
+    },
     async save() {
+      if (
+        !this.user.name ||
+        !this.user.surname ||
+        !this.user.email ||
+        !this.user.phoneNumber ||
+        !this.user.activate
+      ) {
+        return;
+      }
       let result = await axios.post("http://localhost:3000/users", {
         name: this.user.name,
         surname: this.user.surname,
@@ -174,6 +212,15 @@ export default {
         activate: this.user.activate,
       });
       console.log(result);
+      if (result.status == 201) {
+        this.user = {
+          name: "",
+          surname: "",
+          email: "",
+          phoneNumber: "",
+          activate: "",
+        };
+      }
     },
   },
 };

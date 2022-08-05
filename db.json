@@ -1,20 +1,3 @@
 {
-  "users": [
-    {
-      "id": 1,
-      "name": "Jassi",
-      "surName": "Khatkar",
-      "email": "jassikhatkar54@gmail.com",
-      "phoneNumber": "99999999997",
-      "activate": "false"
-    },
-    {
-      "name": "kjl",
-      "surname": "kjl",
-      "email": "kljk;",
-      "phoneNumber": "klk;",
-      "activate": true,
-      "id": 2
-    }
-  ]
+  "users": []
 }
