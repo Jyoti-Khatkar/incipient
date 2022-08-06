@@ -33,6 +33,7 @@
             />
           </svg>
         </li>
+        &nbsp;&nbsp;&nbsp;&nbsp;
         <li class="nav-item">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -47,6 +48,7 @@
             />
           </svg>
         </li>
+        &nbsp;&nbsp;&nbsp;&nbsp;
         <li class="nav-item ml-4">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -66,20 +68,21 @@
       </ul>
     </div>
   </nav>
-  <users-list></users-list>
+  <router-view></router-view>
 </template>
 
 <script>
-import UsersList from "./UsersList.vue";
+// import UsersList from "./UsersList.vue";
 export default {
   components: {
-    UsersList,
+    // UsersList,
   },
   props: {
     msg: String,
   },
   data() {
     return {
+      c: false,
       isOpen: false,
     };
   },

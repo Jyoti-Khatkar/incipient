@@ -1,3 +1,12 @@
 {
-  "users": []
+  "users": [
+    {
+      "name": "gjhkl",
+      "surname": "ghkjlk",
+      "email": "fhgjkl",
+      "phoneNumber": "gjhkjlk",
+      "activate": true,
+      "id": 2
+    }
+  ]
 }

@@ -3,7 +3,6 @@
     <div>User</div>
     <div>
       <button
-        @click="create()"
         type="button"
         class="btn btn-primary"
         data-toggle="modal"
@@ -13,15 +12,15 @@
       </button>
     </div>
   </div>
-  <table class="table">
+  <table class="table setwidth">
     <thead>
       <tr>
-        <th scope="col">First</th>
-        <th scope="col">Last</th>
-        <th scope="col">Handle</th>
-        <th scope="col">First</th>
-        <th scope="col">Last</th>
-        <th scope="col">Handle</th>
+        <th scope="col">First Name</th>
+        <th scope="col">SurName</th>
+        <th scope="col">Email</th>
+        <th scope="col">Phone Number</th>
+        <th scope="col">Activate</th>
+        <th scope="col">Action</th>
       </tr>
     </thead>
     <tbody v-if="userList.length > 0">
@@ -32,7 +31,13 @@
         <td>{{ user.phoneNumber }}</td>
         <td>{{ user.activate }}</td>
         <td>
-          <button type="button" class="btn btn-primary">Edit</button> &nbsp;
+          <button class="btn btn-primary" type="button">
+            <router-link style="color: white" :to="'/edit/' + user.id"
+              >Edit
+            </router-link>
+          </button>
+
+          &nbsp;
           <button
             @click="deleteUser(user.id)"
             type="button"
@@ -154,9 +159,11 @@
 
 <script>
 import axios from "axios";
-import userData from "../../db.json";
 export default {
   name: "App",
+  props: {
+    isOpen: Boolean,
+  },
   components: {},
   computed: {
     isAll: function () {
@@ -164,8 +171,7 @@ export default {
         !this.user.name ||
         !this.user.surname ||
         !this.user.email ||
-        !this.user.phoneNumber ||
-        !this.user.activate
+        !this.user.phoneNumber
       ) {
         return true;
       }
@@ -179,28 +185,34 @@ export default {
         surname: "",
         email: "",
         phoneNumber: "",
-        activate: "",
+        activate: false,
       },
 
       userList: [],
     };
   },
   mounted() {
-    this.userList = userData.users;
+    this.getUser();
   },
   methods: {
     async deleteUser(id) {
       console.log(id, "eeeeeeeeeeeee");
       let result = await axios.delete("http://localhost:3000/users/" + id);
       console.log(result);
+      this.getUser();
+    },
+    async getUser() {
+      let result = await axios.get("http://localhost:3000/users");
+      if (result.status == 200) {
+        this.userList = result.data;
+      }
     },
     async save() {
       if (
         !this.user.name ||
         !this.user.surname ||
         !this.user.email ||
-        !this.user.phoneNumber ||
-        !this.user.activate
+        !this.user.phoneNumber
       ) {
         return;
       }
@@ -218,9 +230,10 @@ export default {
           surname: "",
           email: "",
           phoneNumber: "",
-          activate: "",
+          activate: false,
         };
       }
+      this.getUser();
     },
   },
 };
@@ -230,5 +243,9 @@ export default {
 .top {
   display: flex;
   justify-content: space-between;
+}
+.setwidth {
+  margin-left: 12% !important;
+  width: 89%;
 }
 </style>

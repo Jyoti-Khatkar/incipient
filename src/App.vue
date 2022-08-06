@@ -1,5 +1,6 @@
 <template>
   <app-header msg="Welcome to Your Vue.js App" />
+  <!-- <router-view /> -->
 </template>
 
 <script>
